@@ -48,11 +48,10 @@ final class CountOnMeViewController: UIViewController {
 	}
 
 	@IBAction func tappedDeleteButton(_ sender: UIButton) {
-		guard textView.text.isEmpty else {
-			return
-		}
 		
-		textView.text.removeLast()
+		if !textView.text.isEmpty {
+			textView.text.removeLast()
+		}
 
 	}
 	
