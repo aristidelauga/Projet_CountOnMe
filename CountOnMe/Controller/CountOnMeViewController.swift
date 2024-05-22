@@ -121,32 +121,74 @@ final class CountOnMeViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        // Create local copy of operations
-        var operationsToReduce = elements
-        
-        // Iterate over operations while an operand still here
-        while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
-            
-            var result: Int = 0
-            switch operand {
-			case "/": result = left / right
-			case "*": result = left * right
-            case "+": result = left + right
-            case "-": result = left - right
-            default: break
-            }
-            
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
-        }
-        
+         // Create local copy of operations
+		let operationsToReduce = elements
+
+		let postfixExpression = infixToPostfix(elements)
+		if let result = evaluatePostfix(postfixExpression) {
+			if !expressionHaveResult {
+				textView.text.append(" = \(result)")
+			}
+		} else {
+			self.present(UIAlertController(title: "Erreur", message: "Démarrez un nouveau calcul !", preferredStyle: .alert),
+						 animated: true,
+						 completion: nil)
+		}
+
         if !expressionHaveResult {
         	textView.text.append(" = \(operationsToReduce.first!)")
         }
     }
+
+	func infixToPostfix(_ expression: [String]) -> [String] {
+
+		var output: [String] = []
+		var operandsStack: [String] = []
+
+		let precedence: [String: Int] = ["+": 1, "-": 1, "*": 2, "/": 2]
+
+		for element in expression {
+			if let _ = Int(element) {
+				output.append(element)
+			} else if let precedenceOfElement = precedence[element] {
+				while let last = operandsStack.last, let precedenceOfLast = precedence[last], precedenceOfLast >= precedenceOfElement {
+					output.append(operandsStack.popLast()!)
+				}
+				operandsStack.append(element)
+			}
+		}
+
+		while let last = operandsStack.popLast() {
+			output.append(last)
+		}
+
+		return output
+	}
+
+	func evaluatePostfix(_ expression: [String]) -> Int? {
+		var stack: [Int] = []
+
+		for element in expression {
+			if let number = Int(element) {
+				stack.append(number)
+			} else if element == "+" || element == "-" || element == "*" || element == "/" {
+				guard stack.count >= 2 else { return nil }
+				let right = stack.popLast()!
+				let left = stack.popLast()!
+				var result: Int
+				switch element {
+					case "+": result = left + right
+					case "-": result = left - right
+					case "*": result = left * right
+					case "/": result = left / right
+					default: return nil
+				}
+				stack.append(result)
+			}
+		}
+		return stack.last
+	}
+
 
 }
 
