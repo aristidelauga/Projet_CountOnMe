@@ -39,6 +39,7 @@ final class CountOnMeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		textView.text = ""
     }
     
 	// MARK: - IBActions method
@@ -148,20 +149,23 @@ final class CountOnMeViewController: UIViewController {
 		let precedence: [String: Int] = ["+": 1, "-": 1, "*": 2, "/": 2]
 
 		for element in expression {
+			// If the element is an integer, it's added to the output's array
 			if let _ = Int(element) {
 				output.append(element)
 			} else if let precedenceOfElement = precedence[element] {
 				while let last = operandsStack.last, let precedenceOfLast = precedence[last], precedenceOfLast >= precedenceOfElement {
+					// Removes the last element of `operandsStack` and adds it at the end of `output`
 					output.append(operandsStack.popLast()!)
 				}
+				// If the element is a sign symbol, it is added to the operandsStack
 				operandsStack.append(element)
 			}
 		}
 
+		// Removes every element of `operandsStack` one by one and add them to `output` at the same time
 		while let last = operandsStack.popLast() {
 			output.append(last)
 		}
-
 		return output
 	}
 
@@ -173,7 +177,9 @@ final class CountOnMeViewController: UIViewController {
 				stack.append(number)
 			} else if element == "+" || element == "-" || element == "*" || element == "/" {
 				guard stack.count >= 2 else { return nil }
+				// Last element of the postfix expression
 				let right = stack.popLast()!
+				// Second last element of the postfix expression
 				let left = stack.popLast()!
 				var result: Int
 				switch element {
