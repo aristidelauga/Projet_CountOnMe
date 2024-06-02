@@ -29,9 +29,7 @@ final class CountOnMeViewController: UIViewController {
 	}
 
 	@IBAction func tappedDeleteButton(_ sender: UIButton) {
-		if !computationModel.expression.isEmpty {
-			computationModel.expression.removeLast()
-		}
+		computationModel.tappedDeleteButton()
 	}
 	
 

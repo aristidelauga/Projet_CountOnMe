@@ -48,6 +48,12 @@ final class ComputationModel {
 		self.expression = ""
 	}
 
+	func tappedDeleteButton() {
+		if !expression.isEmpty {
+			expression.removeLast()
+		}
+	}
+
 	func tappedNumberButton(numberText: String) {
 		if expressionHaveResult {
 			cleanText()
@@ -98,10 +104,6 @@ final class ComputationModel {
 			} else { 
 				UIHandler()
 			}
-		}
-
-		if expressionHaveResult {
-			expression.append(" = \(operationsToReduce.first!)")
 		}
 	}
 
