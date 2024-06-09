@@ -7,12 +7,13 @@
 //
 
 import XCTest
-@testable import SimpleCalc
+@testable import CountOnMe
 
 class SimpleCalcTests: XCTestCase {
 
+	private var sut: ComputationModel!
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+		sut = ComputationModel()
     }
 
     override func tearDown() {
@@ -20,9 +21,14 @@ class SimpleCalcTests: XCTestCase {
     }
 
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+		let expression = ["5", "4", "*", "10", "/", "+"]
+		let result = 7
+
+//		let infixToPostfix = sut.infixToPostfix(expression.split(separator: " ").map { "\($0)" })
+		let evaluatedPostfix = sut.evaluatePostFix(expression)
+		print(evaluatedPostfix)
+		XCTAssertEqual(evaluatedPostfix, result)
+	}
 
     func testPerformanceExample() {
         // This is an example of a performance test case.

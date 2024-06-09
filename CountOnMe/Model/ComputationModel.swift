@@ -12,7 +12,6 @@ protocol ComputationModelDelegate {
 	func getTextView(value: String)
 }
 
-
 final class ComputationModel {
 
 	var delegate: ComputationModelDelegate?
