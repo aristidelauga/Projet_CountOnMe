@@ -23,7 +23,7 @@ final class ComputationModel {
 	}
 
 	var elements: [String] {
-		expression.split(separator: " ").map { "\($0)" }
+		self.expression.split(separator: " ").map { "\($0)" }
 	}
 
 	// Error check computed variables
@@ -40,7 +40,7 @@ final class ComputationModel {
 	}
 
 	var expressionHaveResult: Bool {
-		return expression.firstIndex(of: "=") != nil
+		return self.expression.firstIndex(of: "=") != nil
 	}
 
 	func cleanText() {
@@ -48,20 +48,22 @@ final class ComputationModel {
 	}
 
 	func tappedDeleteButton() {
-		if !expression.isEmpty {
-			expression.removeLast()
+		if !self.expression.isEmpty {
+			self.expression.removeLast()
 		}
 	}
 
 	func tappedNumberButton(numberText: String) {
-		if expressionHaveResult {
+		if self.expressionHaveResult {
 			cleanText()
 		}
-		expression.append(numberText)
+		self.expression.append(numberText)
 	}
 
 	func tappedDivisionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		if canAddOperator {
+		print("Current expression: \(self.expression)")
+		print("Can add operator: \(self.canAddOperator)")
+		if self.canAddOperator {
 			self.expression.append(" / ")
 		} else {
 			UIHandler()
@@ -69,7 +71,9 @@ final class ComputationModel {
 	}
 
 	func tappedMultiplicationButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		if canAddOperator {
+		print("Current expression: \(self.expression)")
+		print("Can add operator: \(self.canAddOperator)")
+		if self.canAddOperator {
 			self.expression.append(" * ")
 		} else {
 			UIHandler()
@@ -77,7 +81,9 @@ final class ComputationModel {
 	}
 
 	func tappedAdditionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		if canAddOperator {
+		print("Current expression: \(self.expression)")
+		print("Can add operator: \(self.canAddOperator)")
+		if self.canAddOperator {
 			self.expression.append(" + ")
 		} else {
 			UIHandler()
@@ -85,7 +91,9 @@ final class ComputationModel {
 	}
 
 	func tappedSubstractionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		if canAddOperator {
+		print("Current expression: \(self.expression)")
+		print("Can add operator: \(self.canAddOperator)")
+		if self.canAddOperator {
 			self.expression.append(" - ")
 		} else {
 			UIHandler()
@@ -94,13 +102,13 @@ final class ComputationModel {
 
 	func tappedEqualButtonWithErrorMessage(_ UIHandler: () -> Void) {
 		// Create local copy of operations
-		let operationsToReduce = elements
-		let postfixExpression = infixToPostfix(elements)
-		
+		let operationsToReduce = self.elements
+		let postfixExpression = infixToPostfix(self.elements)
+
 		if let result = evaluatePostFix(postfixExpression) {
-			if !expressionHaveResult {
-				expression.append(" = \(result)")
-			} else { 
+			if !self.expressionHaveResult {
+				self.expression.append(" = \(result)")
+			} else {
 				UIHandler()
 			}
 		}
@@ -138,6 +146,8 @@ final class ComputationModel {
 	}
 
 	func evaluatePostFix(_ expression: [String]) -> Int? {
+
+		print(expression)
 		var stack: [Int] = []
 
 		for element in expression {
