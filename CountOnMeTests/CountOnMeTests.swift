@@ -48,7 +48,7 @@ class CountOnMeTests: XCTestCase {
 		sut.expression = "5+4"
 
 		sut.tappedDivisionButtonWithErrorMessage {
-			print("")
+			XCTFail()
 		}
 
 		XCTAssertEqual(sut.expression, "5+4 / ")
@@ -58,7 +58,7 @@ class CountOnMeTests: XCTestCase {
 		sut.expression = "5+4"
 
 		sut.tappedMultiplicationButtonWithErrorMessage {
-			print("")
+			XCTFail()
 		}
 
 		XCTAssertEqual(sut.expression, "5+4 * ")
@@ -68,7 +68,7 @@ class CountOnMeTests: XCTestCase {
 		sut.expression = "5+4"
 
 		sut.tappedAdditionButtonWithErrorMessage {
-			print("")
+			XCTFail()
 		}
 
 		XCTAssertEqual(sut.expression, "5+4 + ")
@@ -78,7 +78,7 @@ class CountOnMeTests: XCTestCase {
 		sut.expression = "5+4"
 
 		sut.tappedSubstractionButtonWithErrorMessage {
-			print("")
+			XCTFail()
 		}
 
 		XCTAssertEqual(sut.expression, "5+4 - ")
@@ -87,20 +87,20 @@ class CountOnMeTests: XCTestCase {
 	func testTappedEqualButtonWithErrorMessage() {
 		sut.expression = "5 + 4 * 5 / 10"
 		sut.tappedEqualButtonWithErrorMessage {
-			print("")
+			XCTFail()
 		}
 		XCTAssertEqual(sut.expression, "5 + 4 * 5 / 10 = 7")
 	}
 
 	func testInfixToPostfix() {
-		let expression = ["5", "4", "5", "*", "10", "/", "+"]
 		let infixExpression = ["5", "+", "4", "*", "5", "/", "10"]
+		let expression = ["5", "4", "5", "*", "10", "/", "+"]
 
 		XCTAssertEqual(expression, sut.infixToPostfix(infixExpression))
 	}
 
     func testEvaluatePostfix() {
-		let expression = ["5", "4", "5", "*", "10", "/", "+"]
+		let expression = ["5", "4", "5", "*¨", "10", "/", "+"]
 		let result = 7
 
 		let evaluatedPostfix = sut.evaluatePostFix(expression)
@@ -109,8 +109,27 @@ class CountOnMeTests: XCTestCase {
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
+		let expression = [
+			"5", "4", "5", "*", "10", "/", "+", "5000", "+", "92", "75", "*", "+", "820", "2", "/", "-",
+			"45", "12", "*", "+", "150", "-", "42", "+", "7", "2", "*", "3", "/", "5", "+", "18", "3", "/", "*",
+			"200", "+", "32", "4", "/", "-", "64", "8", "*", "+", "512", "/", "20", "10", "/", "+", "8", "-",
+			"3", "6", "*", "+", "5", "3", "/", "-", "25", "*", "1000", "+", "500", "/", "600", "3", "/", "+",
+			"750", "5", "*", "-", "40", "20", "/", "+", "33", "11", "/", "*", "15", "+", "99", "3", "*", "-",
+			"44", "2", "/", "+", "150", "-", "200", "+", "65", "5", "*", "-", "8", "10", "*", "+", "3", "4", "*",
+			"5", "2", "/", "+", "9", "-", "7", "2", "*", "+", "88", "4", "/", "-", "15", "5", "*", "+", "75", "-",
+			"110", "+", "23", "2", "/", "-", "60", "10", "/", "+", "14", "7", "/", "*", "90", "-", "20", "2", "*",
+			"+", "50", "5", "/", "-", "100", "25", "/", "+", "4", "4", "*", "-", "8", "2", "*", "+", "3", "/",
+			"5", "*", "7", "3", "/", "-", "6", "+", "14", "7", "/", "*", "2", "1", "/", "+", "20", "10", "/", "-",
+			"30", "6", "*", "+", "100", "-", "50", "5", "/", "+", "300", "*", "15", "-", "3", "3", "*", "+", "45",
+			"-", "22", "2", "/", "+", "150", "-", "2", "*", "35", "+", "7", "4", "/", "-", "60", "3", "*", "+",
+			"250", "-", "30", "10", "/", "+", "33", "3", "*", "-", "10", "2", "/", "+", "100", "-", "200", "4",
+			"/", "+"
+		]
+
+		let result = 352243
         self.measure {
-            // Put the code you want to measure the time of here.
+			sut.evaluatePostFix(expression)
+			XCTAssertEqual(sut.evaluatePostFix(expression), result)
         }
     }
 

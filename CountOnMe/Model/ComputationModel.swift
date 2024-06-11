@@ -61,8 +61,6 @@ final class ComputationModel {
 	}
 
 	func tappedDivisionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		print("Current expression: \(self.expression)")
-		print("Can add operator: \(self.canAddOperator)")
 		if self.canAddOperator {
 			self.expression.append(" / ")
 		} else {
@@ -71,8 +69,6 @@ final class ComputationModel {
 	}
 
 	func tappedMultiplicationButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		print("Current expression: \(self.expression)")
-		print("Can add operator: \(self.canAddOperator)")
 		if self.canAddOperator {
 			self.expression.append(" * ")
 		} else {
@@ -81,8 +77,6 @@ final class ComputationModel {
 	}
 
 	func tappedAdditionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		print("Current expression: \(self.expression)")
-		print("Can add operator: \(self.canAddOperator)")
 		if self.canAddOperator {
 			self.expression.append(" + ")
 		} else {
@@ -91,8 +85,6 @@ final class ComputationModel {
 	}
 
 	func tappedSubstractionButtonWithErrorMessage(_ UIHandler: () -> Void) {
-		print("Current expression: \(self.expression)")
-		print("Can add operator: \(self.canAddOperator)")
 		if self.canAddOperator {
 			self.expression.append(" - ")
 		} else {
@@ -147,7 +139,6 @@ final class ComputationModel {
 
 	func evaluatePostFix(_ expression: [String]) -> Int? {
 
-		print(expression)
 		var stack: [Int] = []
 
 		for element in expression {

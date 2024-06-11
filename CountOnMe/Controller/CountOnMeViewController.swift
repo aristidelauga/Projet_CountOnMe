@@ -11,7 +11,6 @@ import UIKit
 final class CountOnMeViewController: UIViewController {
 
 	// MARK: - Variables
-// TODO: Détecter quel bouton a ete tape dans le view controller puis décider dans le modele
     @IBOutlet weak private var textView: UITextView!
     @IBOutlet private var numberButtons: [UIButton]!
 	let computationModel = ComputationModel()
