@@ -8,13 +8,14 @@
 
 import Foundation
 
-protocol ComputationModelDelegate {
+protocol ComputationModelDelegate: AnyObject {
 	func getTextView(value: String)
+	func showAlert(withTitle title: String, errorMessage: String, actionTitle: String)
 }
 
 final class ComputationModel {
 
-	var delegate: ComputationModelDelegate?
+	weak var delegate: ComputationModelDelegate?
 
 	var expression = "" {
 		didSet {
@@ -60,53 +61,85 @@ final class ComputationModel {
 		self.expression.append(numberText)
 	}
 
-	func tappedDivisionButtonWithErrorMessage(_ UIHandler: () -> Void) {
+	func tappedDivisionButton() {
 		if self.canAddOperator {
 			self.expression.append(" / ")
 		} else {
-			UIHandler()
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
 		}
 	}
 
-	func tappedMultiplicationButtonWithErrorMessage(_ UIHandler: () -> Void) {
+	func tappedMultiplicationButton() {
 		if self.canAddOperator {
 			self.expression.append(" * ")
 		} else {
-			UIHandler()
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
 		}
 	}
 
-	func tappedAdditionButtonWithErrorMessage(_ UIHandler: () -> Void) {
+	func tappedAdditionButton() {
 		if self.canAddOperator {
 			self.expression.append(" + ")
 		} else {
-			UIHandler()
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
 		}
 	}
 
-	func tappedSubstractionButtonWithErrorMessage(_ UIHandler: () -> Void) {
+	func tappedSubstractionButton() {
 		if self.canAddOperator {
 			self.expression.append(" - ")
 		} else {
-			UIHandler()
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
 		}
 	}
 
-	func tappedEqualButtonWithErrorMessage(_ UIHandler: () -> Void) {
+	func tappedEqualButton() {
+
+		guard self.expressionIsCorrect else {
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.enterCorrectExpression,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
+			return
+		}
+
+		guard self.expressionHaveEnoughElement else {
+			delegate?.showAlert(
+				withTitle: AlertError.ErrorTitle.zeroError,
+				errorMessage: AlertError.ErrorMessage.startNewComputation,
+				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
+			return
+		}
+
 		// Create local copy of operations
 		let operationsToReduce = self.elements
-		let postfixExpression = infixToPostfix(self.elements)
+		let postfixExpression = infixToPostfix(operationsToReduce)
 
 		if let result = evaluatePostFix(postfixExpression) {
 			if !self.expressionHaveResult {
 				self.expression.append(" = \(result)")
 			} else {
-				UIHandler()
+				delegate?.showAlert(
+					withTitle: AlertError.ErrorTitle.error,
+					errorMessage: AlertError.ErrorMessage.startNewComputation,
+					actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
 			}
 		}
 	}
 
-	func infixToPostfix(_ expression: [String]) -> [String] {
+	private func infixToPostfix(_ expression: [String]) -> [String] {
 
 		var output: [String] = []
 		var operandsStack: [String] = []
@@ -137,7 +170,7 @@ final class ComputationModel {
 		return output
 	}
 
-	func evaluatePostFix(_ expression: [String]) -> Int? {
+	private func evaluatePostFix(_ expression: [String]) -> Int? {
 
 		var stack: [Int] = []
 
@@ -155,7 +188,16 @@ final class ComputationModel {
 					case "+": result = left + right
 					case "-": result = left - right
 					case "*": result = left * right
-					case "/": result = left / right
+					case "/": 
+						guard right != 0 else {
+							delegate?.showAlert(
+								withTitle: AlertError.ErrorTitle.error,
+								errorMessage: AlertError.ErrorMessage.divisionByZero,
+								actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
+							cleanText()
+							return nil
+						}
+						result = left / right
 					default: return nil
 				}
 				stack.append(result)

@@ -11,16 +11,15 @@ import UIKit
 final class CountOnMeViewController: UIViewController {
 
 	// MARK: - Variables
-    @IBOutlet weak private var textView: UITextView!
+    @IBOutlet var textView: UITextView!
     @IBOutlet private var numberButtons: [UIButton]!
 	let computationModel = ComputationModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.computationModel.delegate = self
-		computationModel.cleanText()
-    }
-    
+	}
+
 	// MARK: - IBActions method
 
 	@IBAction func tappedACButton(_ sender: UIButton) {
@@ -40,69 +39,34 @@ final class CountOnMeViewController: UIViewController {
     }
 
 	@IBAction func tappedDivisionButton(_ sender: UIButton) {
-		computationModel.tappedDivisionButtonWithErrorMessage {
-			let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-			alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-			self.present(alertVC, animated: true, completion: nil)
-		}
+		computationModel.tappedDivisionButton()
 	}
 
 	@IBAction func tappedMultiplicationButton(_ sender: UIButton) {
-		computationModel.tappedMultiplicationButtonWithErrorMessage {
-			let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-			alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-			self.present(alertVC, animated: true, completion: nil)
-
-		}
+		computationModel.tappedMultiplicationButton()
 	}
 	
     @IBAction private func tappedAdditionButton(_ sender: UIButton) {
-		computationModel.tappedAdditionButtonWithErrorMessage {
-			let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-			alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-			self.present(alertVC, animated: true, completion: nil)
-		}
+		computationModel.tappedAdditionButton()
+
     }
     
     @IBAction private func tappedSubstractionButton(_ sender: UIButton) {
-		computationModel.tappedSubstractionButtonWithErrorMessage {
-			let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-			alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-			self.present(alertVC, animated: true, completion: nil)
-		}
+		computationModel.tappedSubstractionButton()
     }
 
     @IBAction private func tappedEqualButton(_ sender: UIButton) {
-		guard computationModel.expressionIsCorrect else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        
-		guard computationModel.expressionHaveEnoughElement else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-
-		computationModel.tappedEqualButtonWithErrorMessage {
-			self.present(UIAlertController(title: "Erreur", message: "Démarrez un nouveau calcul !", preferredStyle: .alert),
-						 animated: true,
-						 completion: nil)
-		}
+		computationModel.tappedEqualButton()
     }
-
-	func infixToPostfix(_ expression: [String]) -> [String] {
-		computationModel.infixToPostfix(expression)
-	}
-
-	func evaluatePostfix(_ expression: [String]) -> Int? {
-		computationModel.evaluatePostFix(expression)
-	}
 }
 
 extension CountOnMeViewController: ComputationModelDelegate {
 	func getTextView(value: String) {
 		self.textView.text = value
+	}
+	func showAlert(withTitle title: String, errorMessage: String, actionTitle: String) {
+		let alertVC = UIAlertController(title: title, message: errorMessage, preferredStyle: .alert)
+		alertVC.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: nil))
+		self.present(alertVC, animated: true, completion: nil)
 	}
 }

@@ -14,6 +14,7 @@
 		1FA43BDD224E569A00F565CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FA43BDB224E569A00F565CB /* LaunchScreen.storyboard */; };
 		1FA43BE8224E569A00F565CB /* CountOnMeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BE7224E569A00F565CB /* CountOnMeTests.swift */; };
 		1FA43BF3224E569A00F565CB /* CountOnMeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BF2224E569A00F565CB /* CountOnMeUITests.swift */; };
+		924759662C2325450057AB27 /* AlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924759652C2325450057AB27 /* AlertError.swift */; };
 		926EAAAD2BF4D87300F87BFE /* ComputationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926EAAAC2BF4D87300F87BFE /* ComputationModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		1FA43BEE224E569A00F565CB /* CountOnMeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountOnMeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FA43BF2224E569A00F565CB /* CountOnMeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountOnMeUITests.swift; sourceTree = "<group>"; };
 		1FA43BF4224E569A00F565CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		924759652C2325450057AB27 /* AlertError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertError.swift; sourceTree = "<group>"; };
 		926EAAAC2BF4D87300F87BFE /* ComputationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,6 +158,7 @@
 			children = (
 				1FA43BD9224E569A00F565CB /* Assets.xcassets */,
 				1FA43BDE224E569A00F565CB /* Info.plist */,
+				924759652C2325450057AB27 /* AlertError.swift */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FA43BD5224E569900F565CB /* CountOnMeViewController.swift in Sources */,
+				924759662C2325450057AB27 /* AlertError.swift in Sources */,
 				926EAAAD2BF4D87300F87BFE /* ComputationModel.swift in Sources */,
 				1FA43BD3224E569900F565CB /* AppDelegate.swift in Sources */,
 			);
@@ -526,7 +530,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountOnMe.app/CountOnMe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountOnMe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountOnMe";
 			};
 			name = Debug;
 		};
@@ -548,7 +552,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountOnMe.app/CountOnMe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountOnMe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountOnMe";
 			};
 			name = Release;
 		};
@@ -567,9 +571,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincentsaluzzo.SimpleCalcUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SimpleCalc;
+				TEST_TARGET_NAME = CountOnMe;
 			};
 			name = Debug;
 		};
@@ -588,9 +593,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincentsaluzzo.SimpleCalcUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SimpleCalc;
+				TEST_TARGET_NAME = CountOnMe;
 			};
 			name = Release;
 		};
