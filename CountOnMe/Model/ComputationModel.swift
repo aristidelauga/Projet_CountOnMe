@@ -9,17 +9,20 @@
 import Foundation
 
 protocol ComputationModelDelegate: AnyObject {
-	func getTextView(value: String)
-	func showAlert(withTitle title: String, errorMessage: String, actionTitle: String)
+	func didUpdateExpression(value: String)
+	func didDetectError(_ error: AlertError)
 }
 
 final class ComputationModel {
-
+//	protocol Delegate {
+//		func didUpdateExpression(value: String)
+//		func didDetectError(_ error: AlertError)
+//	}
 	weak var delegate: ComputationModelDelegate?
 
 	var expression = "" {
 		didSet {
-			delegate?.getTextView(value: expression)
+			delegate?.didUpdateExpression(value: expression)
 		}
 	}
 
@@ -65,7 +68,7 @@ final class ComputationModel {
 		if self.canAddOperator {
 			self.expression.append(" / ")
 		} else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -76,7 +79,7 @@ final class ComputationModel {
 		if self.canAddOperator {
 			self.expression.append(" * ")
 		} else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -87,7 +90,7 @@ final class ComputationModel {
 		if self.canAddOperator {
 			self.expression.append(" + ")
 		} else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -98,7 +101,7 @@ final class ComputationModel {
 		if self.canAddOperator {
 			self.expression.append(" - ")
 		} else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.operatorAlreadyPresent,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -108,7 +111,7 @@ final class ComputationModel {
 	func tappedEqualButton() {
 
 		guard self.expressionIsCorrect else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.enterCorrectExpression,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -116,7 +119,7 @@ final class ComputationModel {
 		}
 
 		guard self.expressionHaveEnoughElement else {
-			delegate?.showAlert(
+			delegate?.didDetectError(
 				withTitle: AlertError.ErrorTitle.zeroError,
 				errorMessage: AlertError.ErrorMessage.startNewComputation,
 				actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -131,7 +134,7 @@ final class ComputationModel {
 			if !self.expressionHaveResult {
 				self.expression.append(" = \(result)")
 			} else {
-				delegate?.showAlert(
+				delegate?.didDetectError(
 					withTitle: AlertError.ErrorTitle.error,
 					errorMessage: AlertError.ErrorMessage.startNewComputation,
 					actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
@@ -190,10 +193,7 @@ final class ComputationModel {
 					case "*": result = left * right
 					case "/": 
 						guard right != 0 else {
-							delegate?.showAlert(
-								withTitle: AlertError.ErrorTitle.error,
-								errorMessage: AlertError.ErrorMessage.divisionByZero,
-								actionTitle: AlertError.ErrorActionTitle.OK.rawValue)
+							delegate?.didDetectError(.dividedByZero)
 							cleanText()
 							return nil
 						}

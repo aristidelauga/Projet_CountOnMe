@@ -61,12 +61,12 @@ final class CountOnMeViewController: UIViewController {
 }
 
 extension CountOnMeViewController: ComputationModelDelegate {
-	func getTextView(value: String) {
+	func didUpdateExpression(value: String) {
 		self.textView.text = value
 	}
-	func showAlert(withTitle title: String, errorMessage: String, actionTitle: String) {
-		let alertVC = UIAlertController(title: title, message: errorMessage, preferredStyle: .alert)
-		alertVC.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: nil))
+	func didDetectError(_ error: AlertError) {
+		let alertVC = UIAlertController(title: error.title, message: error.message, preferredStyle: .alert)
+		alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 		self.present(alertVC, animated: true, completion: nil)
 	}
 }

@@ -8,7 +8,22 @@
 
 import Foundation
 
-enum AlertError {
+enum AlertError: Error {
+	case dividedByZero
+
+	var title: String {
+		switch self {
+			case .dividedByZero:
+				"Zéro"
+		}
+	}
+
+	var message: String {
+		switch self {
+			case .dividedByZero:
+				"Vous ne pouvez pas diviser par zéro !"
+		}
+	}
 
 	enum ErrorTitle {
 		static let zeroError = "Zéro"
